@@ -10,7 +10,7 @@ parser = optparse.OptionParser(usage="usage: %prog [options] arg", version=versi
 http = urllib3.PoolManager() # Instance to make requests.
 
 url = "https://www.reddit.com/api/username_available.json?user={}" # Url to reddit api for check username available
-dictionary = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890" # Char dictionary for names creating
+dictionary = "qwertyuiopasdfghjklzxcvbnm1234567890" # Char dictionary for names creating
 
 def Check_Available_Username(username):
     response = http.request("GET", url.format(username)) # Get response from reddit api
@@ -23,14 +23,17 @@ def Check_Available_Username(username):
 
 def Check_Available_Username_By_Length(length):
     permutations = list(map(lambda x: "".join(x), itertools.product(dictionary, repeat=length))) # String which contains usernames from itertools.product. Example of itertools.product: product('ABCD', repeat=2) - AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
-    file = open("availables.txt", "a") # File for available usernames
     for username in permutations:
+        if username[0].isdigit():
+            continue
         response = http.request("GET", url.format(username)) # Get response from reddit api
         result = json.dumps(json.loads(response.data.decode("utf-8"))) # Result. Decoding, converting to string from json
         format_print = "Username: {} - {}"
         if result == "true":
             print(format_print.format(username, "Available\tYES!"))
+            file = open("availables.txt", "a") # File for available usernames
             file.write("{}\n".format(username)) # Add Available result to file
+            file.close() # Correctly close the file
         elif result == "false":
             print(format_print.format(username, "Not Available"))
 
