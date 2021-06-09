@@ -1,6 +1,6 @@
 # Check Reddit Username
 
-#### _Script for checking name availability_
+#### _Script for checking name availability on reddit.com_
 
 ## Commands
 _Usage: main.py [options] arg_
