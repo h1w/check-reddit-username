@@ -40,7 +40,7 @@ async def RequestProxy(url, host_port, ptype, country):
     #return [host_port, ptype, country]
     return response
 
-async def main(length):
+async def Check_Available_Usernames_By_Length_Async(length):
     permutations = list(map(lambda x: "".join(x), itertools.product(dictionary, repeat=length))) # String which contains usernames from itertools.product. Example of itertools.product: product('ABCD', repeat=2) - AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
     all_permutations_count = len(permutations)
     available_usernames = 0
@@ -75,20 +75,30 @@ async def main(length):
             print('[Checking]\nAvailable usernames: {}\nAlready checked: {}\nLeft: {}\nTotal: {}'.format(available_usernames, already_checked_usernames, len(permutations), all_permutations_count)) # All info on clear console
         f.close()
 
+async def Check_Available_Username_Async(username):
+    proxies = await GetProxies()
+    tasks=[]
+    result = False
+    for proxy in proxies:
+        host_port, ptype, country = proxy[0], proxy[1], proxy[2]
+        response = await RequestProxy(url_redditapi.format(username), host_port, ptype, country)
+        if response == "ProxyErr":
+            continue
+        else:
+            if response == 'true':
+                print('Username: {} - Available'.format(username))
+                result = True
+            elif response == 'false':
+                print('Username: {} - Not available'.format(username))
+                result = True            
+            break
+    if result == False:
+        print('Sorry, try again. =(\nProxy servers may be faulty, or you entered too long username.')
+
 def Check_Available_Username(username):
     if len(username) < 3: # Checking the dimension of the username 
         print('Sorry, but username must be more than 2 characters.')
-    response = http.request("GET", url_redditapi.format(username)) # Get response from reddit api
-    json_result = json.loads(response.data.decode("utf-8"))
-    if json_result["message"] == "Too Many Requests":
-        print("{}. Too Many Requests, please wait a few seconds.".format(username))
-        return
-    result = json.dumps(json_result) # Result. Decoding, converting to string from json
-    format_print = "Username: {} - {}"
-    if result == "true":
-        print(format_print.format(username, "Available"))
-    else:
-        print(format_print.format(username, "Not Available"))
+    asyncio.run(Check_Available_Username_Async(username))
 
 def Check_Available_Usernames_By_Length(length):
     if length < 3: # Checking the dimension of the username 
@@ -96,7 +106,7 @@ def Check_Available_Usernames_By_Length(length):
         exit()
     print('\033[H\033[J', end='') # Clear python console output
     print('Checking...')
-    asyncio.run(main(length))
+    asyncio.run(Check_Available_Usernames_By_Length_Async(length))
 
 parser.add_option(
     "-n", "--byname",
