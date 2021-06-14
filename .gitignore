@@ -1,3 +1,4 @@
 /venv/
 /.vscode/
 availables.txt
+/__pycache__/
