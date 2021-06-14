@@ -1,6 +1,7 @@
 # Check Reddit Username
 
 #### _Script for checking name availability on reddit.com_
+Sometimes a SSL Error may be displayed, just ignore it, the program continues to run =)
 
 ## Commands
 _Usage: main.py [options] arg_
