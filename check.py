@@ -71,12 +71,12 @@ async def main(length):
                         f.flush()
                         available_usernames+=1
             permutations = permutations[len(proxies):]
-            print('\033[H\033[J', end='')
-            print('[Checking]\nAvailable usernames: {}\nAlready checked: {}\nLeft: {}\nTotal: {}'.format(available_usernames, already_checked_usernames, len(permutations), all_permutations_count))
+            print('\033[H\033[J', end='') # Clear python console output
+            print('[Checking]\nAvailable usernames: {}\nAlready checked: {}\nLeft: {}\nTotal: {}'.format(available_usernames, already_checked_usernames, len(permutations), all_permutations_count)) # All info on clear console
         f.close()
 
 def Check_Available_Username(username):
-    if len(username) < 3:
+    if len(username) < 3: # Checking the dimension of the username 
         print('Sorry, but username must be more than 2 characters.')
     response = http.request("GET", url_redditapi.format(username)) # Get response from reddit api
     json_result = json.loads(response.data.decode("utf-8"))
@@ -91,10 +91,10 @@ def Check_Available_Username(username):
         print(format_print.format(username, "Not Available"))
 
 def Check_Available_Usernames_By_Length(length):
-    if length < 3:
+    if length < 3: # Checking the dimension of the username 
         print('Sorry, but username must be more than 2 characters.')
         exit()
-    print('\033[H\033[J', end='')
+    print('\033[H\033[J', end='') # Clear python console output
     print('Checking...')
     asyncio.run(main(length))
 
