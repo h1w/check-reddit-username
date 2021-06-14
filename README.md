@@ -7,7 +7,7 @@ _Usage: main.py [options] arg_
 - --version - Show program's version number and exit
 - -h --help - Show commands.
 - -n USERNAME, --byname=USERNAME - Check available username by name.
-- -l USERNAMES_LENGTH, --bylen=USERNAMES_LENGTH - Check available username by dictionary with declarated length. Result will be logged to file: available.txt
+- -l USERNAMES_LENGTH, --bylen=USERNAMES_LENGTH - Check available username by dictionary with declarated length. Result will be logged to file.
 
 ## License 
 ##### _GPL-3.0 License_
